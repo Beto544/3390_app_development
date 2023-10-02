@@ -1,0 +1,11 @@
+APP login screen
+npx create-expo-app App
+cd App
+npm install @react-navigation/native
+npx expo install react-native-screens react-native-safe-area-context
+npm install @react-navigation/stack
+npm install native-base
+npx expo install react-native-svg@12.1.1
+expo install react-native-safe-area-context@3.3.2
+npx expo install react-native-safe-area-context@3.3.2
+npx expo install react-native-gesture-handler
