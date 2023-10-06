@@ -17,12 +17,7 @@ function Login() {
                     <Text style={styles.signupText}>Sign up</Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.text2}>
-                <Text> Skip Login? </Text>
-                <TouchableOpacity onPress={() => navigation.navigate("Main")}>
-                    <Text style={styles.signupText}>Skip</Text>
-                </TouchableOpacity>
-            </View>
+            
             {/* Username or Email Input Field */}
             <View style={styles.buttonStyle}>
                 <View style={styles.emailInput}>

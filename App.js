@@ -1,28 +1,45 @@
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
-import Main from './screens/Main';
+import HomeScreen from './screens/HomeScreen';
+import CreateQuiz from './screens/CreateQuiz';
+import CreateFlashcards from './screens/CreateFlashCards';
+import TakeQuiz from './screens/TakeQuiz';
 
-
-import { NavigationContainer } from '@react-navigation/native';
-import {createStackNavigator } from '@react-navigation/stack';
+import CreateDocument from './screens/CreateDocument';
+import Community from './screens/Community';
+import { View, Text, Button } from 'react-native';
 
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
-function App(){
+function HomeStack() {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}} >
-    <Stack.Screen name = "Login" component={Login} />
-    <Stack.Screen name = "Signup" component={Signup} />
-    <Stack.Screen name = "Main" component={Main} />
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="HomeSreen" component={HomeScreen} />
     </Stack.Navigator>
   );
 }
 
-export default () => {
+function App() {
   return (
+  
     <NavigationContainer>
-    <App />
+      {/* Home side menu options */}
+      <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen name="Home" component={HomeStack} />
+        <Drawer.Screen name="Login" component={Login} />
+        <Drawer.Screen name="Signup" component={Signup} />
+        <Drawer.Screen name="Community" component={Community} />
+        <Drawer.Screen name="Create Quiz" component={CreateQuiz} />
+        <Drawer.Screen name="Create Flashcards" component={CreateFlashcards} />
+        <Drawer.Screen name="Take Quiz" component={TakeQuiz} />
+      </Drawer.Navigator>
     </NavigationContainer>
-  )
+  );
 }
+
+export default App;
