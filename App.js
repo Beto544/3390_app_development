@@ -1,3 +1,4 @@
+// App.js
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -8,8 +9,7 @@ import HomeScreen from './screens/HomeScreen';
 import CreateQuiz from './screens/CreateQuiz';
 import CreateFlashcards from './screens/CreateFlashCards';
 import TakeQuiz from './screens/TakeQuiz';
-
-import CreateDocument from './screens/CreateDocument';
+import ResultsScreen from './screens/ResultsScreen';
 import Community from './screens/Community';
 import { View, Text, Button } from 'react-native';
 
@@ -19,7 +19,8 @@ const Drawer = createDrawerNavigator();
 function HomeStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="HomeSreen" component={HomeScreen} />
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="Results" component={ResultsScreen} options={{headerShown:false}}/>
     </Stack.Navigator>
   );
 }
