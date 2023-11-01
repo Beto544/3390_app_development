@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-
+import axios from 'axios'
 function Login() {
     const navigation = useNavigation();
     const [name, SetName] = useState("");
@@ -11,11 +11,16 @@ function Login() {
     const [password, SetPassword] = useState("");
 
     const handleSubmit = async () => {
-        if(name == ' ' || email == ' ' || password == ' '){
+        if(name === ' ' || email === ' ' || password === ' '){
             alert("All fields are required");
             return;
         }
-        axios.post("http://localhost:8000/api/user/createUser", {name, email, password})
+        await axios.post("http://192.168.1.155:8000/api/user/create", {name: name,email: email,password: password})
+        .then(res => {
+            console.log(res);
+            console.log(res.data)
+        })
+        .catch(error => console.log(error))
         alert("Signed up successfully!")
     }
 
@@ -42,7 +47,7 @@ function Login() {
                             />
                         }
                         variant="outline"
-                        secureTextEntry={true}
+                        
                         placeholder="Username"
                         _light={{
                             placeholderTextColor: "blueGray.400",
@@ -72,7 +77,7 @@ function Login() {
                             />
                         }
                         variant="outline"
-                        secureTextEntry={true}
+                        
                         placeholder="Email"
                         _light={{
                             placeholderTextColor: "blueGray.400",
@@ -118,7 +123,7 @@ function Login() {
 
             {/* Button */}
             <View style={styles.buttonContainer}>
-                <Button style={styles.buttonDesign}>
+                <Button style={styles.buttonDesign} onPress={handleSubmit}>
                     Sign Up
                 </Button>
             </View>
