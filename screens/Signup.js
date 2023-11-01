@@ -6,46 +6,88 @@ import { useNavigation } from "@react-navigation/native";
 
 function Login() {
     const navigation = useNavigation();
+    const [name, SetName] = useState("");
+    const [email, SetEmail] = useState("");
+    const [password, SetPassword] = useState("");
+
+    const handleSubmit = async () => {
+        if(name == ' ' || email == ' ' || password == ' '){
+            alert("All fields are required");
+            return;
+        }
+        axios.post("http://localhost:8000/api/user/createUser", {name, email, password})
+        alert("Signed up successfully!")
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.Middle}>
                 <Text style={styles.LoginText}>Register</Text>
             </View>
-            {/* Username or Email Input Field */}
-            <View style={styles.buttonStyle}>
+            {/* Username */}
+            <View style={styles.buttonStyleX}>
                 <View style={styles.emailInput}>
-                    <Input
+                    <Input value={name} onChangeText={text => SetName(text)}
                         InputLeftElement={
                             <Icon
-                                as={<FontAwesome5 name="user-secret" />}
+                                as={<FontAwesome5 name="key" />}
                                 size="sm"
                                 m={2}
                                 _light={{
-                                    color: 'black',
+                                    color: "black"
                                 }}
-
                                 _dark={{
-                                    color: "gray.300",
+                                    color: "gray.300"
                                 }}
                             />
                         }
                         variant="outline"
-                        placeholder="Email"
+                        secureTextEntry={true}
+                        placeholder="Username"
                         _light={{
-                            placeholderTextColor: "blueGray.400"
+                            placeholderTextColor: "blueGray.400",
                         }}
                         _dark={{
-                            placeholderTextColor: "blueGray.50",
+                            placeholderTextColor: "blueGray.50"
                         }}
-
                     />
+
                 </View>
             </View>
+            {/* Email Input Field */}
+            <View style={styles.buttonStyleX}>
+                <View style={styles.emailInput}>
+                    <Input value={email} onChangeText={text => SetEmail(text)}
+                        InputLeftElement={
+                            <Icon
+                                as={<FontAwesome5 name="key" />}
+                                size="sm"
+                                m={2}
+                                _light={{
+                                    color: "black"
+                                }}
+                                _dark={{
+                                    color: "gray.300"
+                                }}
+                            />
+                        }
+                        variant="outline"
+                        secureTextEntry={true}
+                        placeholder="Email"
+                        _light={{
+                            placeholderTextColor: "blueGray.400",
+                        }}
+                        _dark={{
+                            placeholderTextColor: "blueGray.50"
+                        }}
+                    />
 
+                </View>
+            </View>
             {/* Password Input Field */}
             <View style={styles.buttonStyleX}>
                 <View style={styles.emailInput}>
-                    <Input
+                    <Input value={password} onChangeText={text => SetPassword(text)}
                         InputLeftElement={
                             <Icon
                                 as={<FontAwesome5 name="key" />}
