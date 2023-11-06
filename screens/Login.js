@@ -1,10 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-
+import axios from 'axios'
 function Login() {
+    
+    const [name, SetName] = useState("");
+    const [email, SetEmail] = useState("");
+    const [password, SetPassword] = useState("");
+
+    const handleSubmit = async () => {
+        if(name === ' ' || email === ' ' || password === ' '){
+            alert("All fields are required");
+            return;
+        }
+        await axios.post("http://192.168.1.155:8000/api/user/create", {name: name,email: email,password: password})
+        .then(res => {
+            console.log(res);
+            console.log(res.data)
+        })
+        .catch(error => console.log(error))
+        alert("Signed up successfully!")
+    }
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
@@ -17,11 +35,40 @@ function Login() {
                     <Text style={styles.signupText}>Sign up</Text>
                 </TouchableOpacity>
             </View>
-            
-            {/* Username or Email Input Field */}
+            {/* Username */}
             <View style={styles.buttonStyle}>
                 <View style={styles.emailInput}>
-                    <Input
+                    <Input value={name} onChangeText={text => SetName(text)}
+                        InputLeftElement={
+                            <Icon
+                                as={<FontAwesome5 name="user-secret" />}
+                                size="sm"
+                                m={2}
+                                _light={{
+                                    color: 'black',
+                                }}
+
+                                _dark={{
+                                    color: "gray.300",
+                                }}
+                            />
+                        }
+                        variant="outline"
+                        placeholder="Username"
+                        _light={{
+                            placeholderTextColor: "blueGray.400"
+                        }}
+                        _dark={{
+                            placeholderTextColor: "blueGray.50",
+                        }}
+
+                    />
+                </View>
+            </View>
+            {/* Email Input Field */}
+            <View style={styles.buttonStyle}>
+                <View style={styles.emailInput}>
+                    <Input  value={email} onChangeText={text => SetEmail(text)}
                         InputLeftElement={
                             <Icon
                                 as={<FontAwesome5 name="user-secret" />}
@@ -52,7 +99,7 @@ function Login() {
             {/* Password Input Field */}
             <View style={styles.buttonStyleX}>
                 <View style={styles.emailInput}>
-                    <Input
+                    <Input  value={password} onChangeText={text => SetPassword(text)}
                         InputLeftElement={
                             <Icon
                                 as={<FontAwesome5 name="key" />}
@@ -83,7 +130,7 @@ function Login() {
 
             {/* Button */}
             <View style={styles.buttonContainer}>
-                <Button style={styles.buttonDesign}>
+                <Button style={styles.buttonDesign} onPress={handleSubmit}>
                     LOGIN
                 </Button>
             </View>
