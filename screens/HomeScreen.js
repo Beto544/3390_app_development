@@ -1,3 +1,4 @@
+// HomeScreen.js
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Image, Pressable } from 'react-native';
 import React from 'react';

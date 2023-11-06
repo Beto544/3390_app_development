@@ -9,8 +9,9 @@ import HomeScreen from './screens/HomeScreen';
 import CreateQuiz from './screens/CreateQuiz';
 import CreateFlashcards from './screens/CreateFlashCards';
 import TakeQuiz from './screens/TakeQuiz';
+import MyQuizzes from './screens/MyQuizzes';
 import ResultsScreen from './screens/ResultsScreen';
-import Community from './screens/Community';
+import QuizList from './screens/QuizList';
 import { View, Text, Button } from 'react-native';
 
 const Stack = createStackNavigator();
@@ -21,6 +22,7 @@ function HomeStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="Results" component={ResultsScreen} options={{headerShown:false}}/>
+      <Stack.Screen name="TakeQuiz" component={TakeQuiz} />
     </Stack.Navigator>
   );
 }
@@ -34,10 +36,9 @@ function App() {
         <Drawer.Screen name="Home" component={HomeStack} />
         <Drawer.Screen name="Login" component={Login} />
         <Drawer.Screen name="Signup" component={Signup} />
-        <Drawer.Screen name="Community" component={Community} />
+        <Drawer.Screen name="QuizList" component={QuizList} />
         <Drawer.Screen name="Create Quiz" component={CreateQuiz} />
         <Drawer.Screen name="Create Flashcards" component={CreateFlashcards} />
-        <Drawer.Screen name="Take Quiz" component={TakeQuiz} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
