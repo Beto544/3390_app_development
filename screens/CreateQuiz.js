@@ -38,7 +38,7 @@ const QuizCreationScreen = () => {
   console.log('Quiz saved successfully with ID:', quizId);
   
   // Proceed to navigate to the 'TakeQuiz' screen
-  navigation.navigate('TakeQuiz', { quizId });
+  //navigation.navigate('TakeQuiz', { quizId });
 
 } catch (error) {
   console.error('Error saving quiz: ', error);
