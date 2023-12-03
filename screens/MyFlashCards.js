@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const QuizListScreen = () => {
   const [quizzes, setQuizzes] = useState([]);
   const navigation = useNavigation();
 
-  // Function to load quizzes from AsyncStorage
+  // Define loadQuizzes inside QuizListScreen
   const loadQuizzes = async () => {
     try {
       const quizIds = JSON.parse(await AsyncStorage.getItem('quizIds')) || [];
@@ -24,21 +24,18 @@ const QuizListScreen = () => {
       return [];
     }
   };
-  
-  // Function to refresh the quiz list
-  const refreshQuizList = async () => {
-    const loadedQuizzes = await loadQuizzes();
-    setQuizzes(loadedQuizzes);
-  };
 
-  useFocusEffect(() => {
-    // Load quizzes when the screen comes into focus
-    refreshQuizList();
-  });
+  useEffect(() => {
+    const getQuizzes = async () => {
+      const loadedQuizzes = await loadQuizzes();
+      setQuizzes(loadedQuizzes);
+    };
+
+    getQuizzes();
+  }, []);
 
   const selectQuiz = (quiz) => {
     // Navigate to TakeQuiz screen with quiz data
-    console.log('Selected QuizID:', quiz.quizId);
     navigation.navigate('TakeQuiz', { quizId: quiz.quizId }); // Pass quizId as a parameter
   };
 

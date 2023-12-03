@@ -1,4 +1,5 @@
 // ResultsScreen.js
+
 import {
   StyleSheet,
   Text,
@@ -120,19 +121,6 @@ const ResultsScreen = () => {
           <Text style={{ color: "white", textAlign: "center" }}>Continue</Text>
         </Pressable>
       </Pressable>
-      <Pressable
-          style={{
-            backgroundColor: "green",
-            padding: 8,
-            marginLeft: "auto",
-            marginRight: "auto",
-            marginBottom: 20,
-            borderRadius: 5,
-          }}
-          onPress={handleContinue} // Call handleContinue when the button is pressed
-        >
-          <Text style={{ color: "white", textAlign: "center" }}>Restart</Text>
-        </Pressable>
     </SafeAreaView>
   );
 };
