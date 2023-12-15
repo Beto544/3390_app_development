@@ -1,91 +1,92 @@
-// QuizList.js
+// FlashcardList.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
-const QuizListScreen = () => {
-  const [quizzes, setQuizzes] = useState([]);
+const FlashcardListScreen = () => {
+  const [flashcards, setFlashcards] = useState([]);
   const navigation = useNavigation();
 
-  // Define loadQuizzes inside QuizListScreen
-  const loadQuizzes = async () => {
+  // Function to load flashcards from AsyncStorage
+  const loadFlashcards = async () => {
     try {
-      const quizIds = JSON.parse(await AsyncStorage.getItem('quizIds')) || [];
-      const quizzes = await Promise.all(
-        quizIds.map(async (id) => {
-          const quizData = await AsyncStorage.getItem(id);
-          return quizData ? JSON.parse(quizData) : null;
+      const flashcardIds = JSON.parse(await AsyncStorage.getItem('flashcards')) || [];
+      const flashcards = await Promise.all(
+        flashcardIds.map(async (id) => {
+          const flashcardData = await AsyncStorage.getItem(id);
+          return flashcardData ? JSON.parse(flashcardData) : null;
         })
       );
-      return quizzes.filter(Boolean);
+      return flashcards.filter(Boolean);
     } catch (error) {
-      console.error("Failed to load quizzes:", error);
+      console.error("Failed to load flashcards:", error);
       return [];
     }
   };
+  
+  // Function to refresh the flashcard list
+  const refreshFlashcardList = async () => {
+    const loadedFlashcards = await loadFlashcards();
+    setFlashcards(loadedFlashcards);
+  };
 
-  useEffect(() => {
-    const getQuizzes = async () => {
-      const loadedQuizzes = await loadQuizzes();
-      setQuizzes(loadedQuizzes);
-    };
+  useFocusEffect(() => {
+    // Load flashcards when the screen comes into focus
+    refreshFlashcardList();
+  });
 
-    getQuizzes();
-  }, []);
-
-  const selectQuiz = (quiz) => {
-    // Navigate to TakeQuiz screen with quiz data
-    navigation.navigate('TakeQuiz', { quizId: quiz.quizId }); // Pass quizId as a parameter
+  const selectFlashcard = (flashcard) => {
+    // Navigate to ViewFlashcard screen with flashcard data
+    console.log('Selected Flashcard ID:', flashcard.flashcardId);
+    navigation.navigate('FlashList', { flashcardId: flashcard.flashcardId }); // Pass flashcardId as a parameter
   };
 
   return (
     <View style={{ flex: 1 }}>
-      {quizzes.length > 0 ? (
+      {flashcards.length > 0 ? (
         <FlatList
-          data={quizzes}
-          keyExtractor={(item) => item.quizId}
+          data={flashcards}
+          keyExtractor={(item) => item.flashcardId}
           renderItem={({ item }) => (
-            <View style={styles.quizItem}>
-              <Text style={styles.quizTitle}>{item.quizName}</Text>
-              <Text style={styles.quizInfo}>
-                Number of questions: {item.questions.length}
-              </Text>
-              {/* Add Pressable to select a quiz */}
+            <View style={styles.flashcardItem}>
+              <Text style={styles.flashcardQuestion}>{item.question}</Text>
+              <Text style={styles.flashcardAnswer}>{item.answer}</Text>
+              {/* Add Pressable to select a flashcard */}
               <Pressable
-                onPress={() => selectQuiz(item)}
-                style={styles.startQuizButton}
+                onPress={() => selectFlashcard(item)}
+                style={styles.viewFlashcardButton}
               >
-                <Text>Start Quiz</Text>
+                <Text>View Flashcard</Text>
               </Pressable>
             </View>
           )}
         />
       ) : (
-        <Text>No quizzes available</Text>
+        <Text>No flashcards available</Text>
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  quizItem: {
+  flashcardItem: {
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd', 
     backgroundColor: 'white', 
   },
-  quizTitle: {
+  flashcardQuestion: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333', 
   },
-  quizInfo: {
+  flashcardAnswer: {
     fontSize: 14,
     color: '#666', 
     marginTop: 5, 
   },
-  startQuizButton: {
+  viewFlashcardButton: {
     marginTop: 10, 
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -93,13 +94,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignSelf: 'flex-start', // align to the left
   },
-  startQuizButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  
 });
 
-
-export default QuizListScreen;
+export default FlashcardListScreen;

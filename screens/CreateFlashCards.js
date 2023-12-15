@@ -1,5 +1,7 @@
 import React, {useState} from "react";
-import { View, Text, StyleSheet, Button, TextInput, Animated } from "react-native";
+import { View, Text, StyleSheet, Button, TextInput } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 export default function CreateFlashCards(){
     const [question, setQuestion] = useState("");
@@ -8,6 +10,28 @@ export default function CreateFlashCards(){
     const [currentIndex, setCurrentIndex] = useState(0);
     const [flip, setFlip] = useState(false);
 
+    const saveFlashcards = async () => {
+        const flashcardsId = `flashcards-${new Date().getTime()}`;
+        console.log('Flashcards Data Before Saving:', flashcards);
+        const flashcardsData = {
+            flashcardsId,
+            flashcards,
+        };
+        
+        try {
+            const existingFlashCards = JSON.parse(await AsyncStorage.getItem('flashcards')) || [];
+            const newFlashCards = [...existingFlashCards, flashcardsId];
+
+            await AsyncStorage.setItem('flashcards', JSON.stringify(newFlashCards));
+
+            await AsyncStorage.setItem(flashcardsId, JSON.stringify(flashcardsData));
+            const keys = await AsyncStorage.getAllKeys();
+            console.log('AsyncStorage Keys:', keys);
+        } catch (error) {
+            console.error('Error saving flashcards: ', error);
+        }
+    };
+
     const addFlashcard = () => {
         if (question.trim() === "" || answer.trim() === "") {
             return;
@@ -15,6 +39,7 @@ export default function CreateFlashCards(){
         setFlashcards([...flashcards, {question, answer}]);
         setQuestion("");
         setAnswer("");
+        saveFlashcards();
     };
 
     const flipFlashcard = () => {
@@ -25,11 +50,13 @@ export default function CreateFlashCards(){
         if (currentIndex < flashcards.length - 1) {
             setCurrentIndex(currentIndex + 1);
         }
+        saveFlashcards();
     };
     const previousFlashcard = () => {
         if (currentIndex > 0) {
             setCurrentIndex(currentIndex - 1);
         }
+        saveFlashcards();
     };
         return (
             <View style={styles.container}>
@@ -51,6 +78,7 @@ export default function CreateFlashCards(){
                 />
 
                 <Button title="Add Flashcard" onPress={addFlashcard} />
+                <Button title="Save Flashcards" onPress={saveFlashcards} />
                 {flashcards.length > 0 &&(
                     <View>
                         <Text>{flip ? "Answer" : "Question"}</Text>
