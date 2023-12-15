@@ -1,5 +1,5 @@
 // createQuiz.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -11,7 +11,7 @@ const QuizCreationScreen = () => {
   const [currentQuestion, setCurrentQuestion] = useState('');
   const [options, setOptions] = useState(['', '', '', '']);
   const [correctAnswerIndex, setCorrectAnswerIndex] = useState('');
-
+  const [saveSuccessful, setSaveSuccessful] = useState(false); // New state variable for tracking save success
   // Function to save the quiz locally
   const saveQuiz = async () => {
     const quizId = `quiz-${new Date().getTime()}`;
@@ -39,8 +39,16 @@ const QuizCreationScreen = () => {
       console.log('Quiz saved successfully with ID:', quizId);
       const keys = await AsyncStorage.getAllKeys();
       console.log('AsyncStorage Keys:', keys);
+      setSaveSuccessful(true);
+      // Reset state variables
+      setQuizName('');
+      setQuestions([]);
+      setCurrentQuestion('');
+      setOptions(['', '', '', '']);
+      setCorrectAnswerIndex('');
     } catch (error) {
       console.error('Error saving quiz: ', error);
+      setSaveSuccessful(false);
     }
   };
 
@@ -98,6 +106,10 @@ const QuizCreationScreen = () => {
       />
       <Button title="Add Question" onPress={addQuestion} />
       <Button title="Save Quiz" onPress={saveQuiz} />
+      {/* Display success message */}
+      {saveSuccessful && (
+        <Text>Flashcard Set Saved Successfully!</Text>
+      )}
       {/* Display questions and options */}
       {questions.map((q, index) => (
         <View key={index}>

@@ -1,98 +1,133 @@
 // FlashcardList.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 const FlashcardListScreen = () => {
-  const [flashcards, setFlashcards] = useState([]);
+  const [flashcardSets, setFlashcardSets] = useState([]);
   const navigation = useNavigation();
 
-  // Function to load flashcards from AsyncStorage
-  const loadFlashcards = async () => {
+  // Function to load flashcard sets from AsyncStorage
+  const loadFlashcardSets = async () => {
     try {
-      const flashcardIds = JSON.parse(await AsyncStorage.getItem('flashcards')) || [];
-      const flashcards = await Promise.all(
-        flashcardIds.map(async (id) => {
-          const flashcardData = await AsyncStorage.getItem(id);
-          return flashcardData ? JSON.parse(flashcardData) : null;
+      const setIds = JSON.parse(await AsyncStorage.getItem('flashcardSetIds')) || [];
+      const loadedSets = await Promise.all(
+        setIds.map(async (id) => {
+          const setData = await AsyncStorage.getItem(id);
+          return setData ? JSON.parse(setData) : null;
         })
       );
-      return flashcards.filter(Boolean);
+      return loadedSets.filter(Boolean);
     } catch (error) {
-      console.error("Failed to load flashcards:", error);
+      console.error("Failed to load flashcard sets:", error);
       return [];
     }
   };
-  
-  // Function to refresh the flashcard list
-  const refreshFlashcardList = async () => {
-    const loadedFlashcards = await loadFlashcards();
-    setFlashcards(loadedFlashcards);
+
+  // Function to delete a flashcard set
+  const deleteFlashcardSet = async (setId) => {
+    try {
+      // Remove the set from AsyncStorage
+      await AsyncStorage.removeItem(setId);
+
+      // Update the list of flashcard sets by excluding the deleted set
+      setFlashcardSets((prevSets) => prevSets.filter((set) => set.setId !== setId));
+
+      // Update the list of set IDs
+      const setIds = flashcardSets.map((set) => set.setId);
+      await AsyncStorage.setItem('flashcardSetIds', JSON.stringify(setIds));
+
+      // Optionally, show a success message or perform any other necessary actions
+      console.log('Deleted Flashcard Set ID:', setId);
+    } catch (error) {
+      console.error("Failed to delete flashcard set:", error);
+    }
+  };
+
+  // Function to refresh the flashcard set list
+  const refreshFlashcardSetList = async () => {
+    const loadedSets = await loadFlashcardSets();
+    setFlashcardSets(loadedSets);
   };
 
   useFocusEffect(() => {
-    // Load flashcards when the screen comes into focus
-    refreshFlashcardList();
+    // Load flashcard sets when the screen comes into focus
+    refreshFlashcardSetList();
   });
 
-  const selectFlashcard = (flashcard) => {
-    // Navigate to ViewFlashcard screen with flashcard data
-    console.log('Selected Flashcard ID:', flashcard.flashcardId);
-    navigation.navigate('FlashList', { flashcardId: flashcard.flashcardId }); // Pass flashcardId as a parameter
+  const selectFlashcardSet = (flashcardSet) => {
+    // Navigate to a screen to view or interact with the selected flashcard set
+    console.log('Selected Flashcard Set ID:', flashcardSet.setId);
+    navigation.navigate('TakeFlash', { setId: flashcardSet.setId }); // Pass setId as a parameter
   };
 
   return (
     <View style={{ flex: 1 }}>
-      {flashcards.length > 0 ? (
+      {flashcardSets.length > 0 ? (
         <FlatList
-          data={flashcards}
-          keyExtractor={(item) => item.flashcardId}
+          data={flashcardSets}
+          keyExtractor={(item) => item.setId}
           renderItem={({ item }) => (
-            <View style={styles.flashcardItem}>
-              <Text style={styles.flashcardQuestion}>{item.question}</Text>
-              <Text style={styles.flashcardAnswer}>{item.answer}</Text>
-              {/* Add Pressable to select a flashcard */}
+            <View style={styles.setItem}>
+              <Text style={styles.setTitle}>{item.flashcardSetName}</Text>
+              <Text style={styles.setInfo}>
+                Number of cards: {item.cards.length}
+              </Text>
               <Pressable
-                onPress={() => selectFlashcard(item)}
-                style={styles.viewFlashcardButton}
+                onPress={() => selectFlashcardSet(item)}
+                style={styles.viewSetButton}
               >
-                <Text>View Flashcard</Text>
+                <Text>View Set</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => deleteFlashcardSet(item.setId)}
+                style={styles.deleteSetButton}
+              >
+                <Text>Delete Set</Text>
               </Pressable>
             </View>
           )}
         />
       ) : (
-        <Text>No flashcards available</Text>
+        <Text>No flashcard sets available</Text>
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  flashcardItem: {
+  setItem: {
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd', 
-    backgroundColor: 'white', 
+    borderBottomColor: '#ddd',
+    backgroundColor: 'white',
   },
-  flashcardQuestion: {
+  setTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333', 
+    color: '#333',
   },
-  flashcardAnswer: {
+  setInfo: {
     fontSize: 14,
-    color: '#666', 
-    marginTop: 5, 
+    color: '#666',
+    marginTop: 5,
   },
-  viewFlashcardButton: {
-    marginTop: 10, 
+  viewSetButton: {
+    marginTop: 10,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: '#5cb85c', 
+    backgroundColor: '#5cb85c',
     borderRadius: 5,
     alignSelf: 'flex-start', // align to the left
+  },
+  deleteSetButton: {
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: '#d9534f', // Red color for delete button
+    borderRadius: 5,
+    alignSelf: 'flex-start',
   },
 });
 

@@ -12,6 +12,7 @@ import TakeQuiz from './screens/TakeQuiz';
 import ResultsScreen from './screens/ResultsScreen';
 import QuizList from './screens/QuizList';
 import FlashList from './screens/MyFlashCards';
+import TakeFlash from './screens/ViewFlashcardSet';
 import { View, Text, Button } from 'react-native';
 
 const Stack = createStackNavigator();
@@ -23,6 +24,7 @@ function HomeStack() {
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="Results" component={ResultsScreen} options={{headerShown:false}}/>
       <Stack.Screen name="TakeQuiz" component={TakeQuiz} />
+      <Stack.Screen name="TakeFlash" component={TakeFlash}/>
     </Stack.Navigator>
   );
 }

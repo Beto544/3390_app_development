@@ -8,13 +8,12 @@ export default function HomeScreen() {
 
     // Function to handle the press action
     const handlePressQuiz = () => {
-        // You might want to navigate to the Quiz screen or perform another action
-        // navigation.navigate('QuizScreen'); // Use the correct screen name as per your navigation setup
+        // navigation.navigate('QuizScreen'); 
     };
 
     const handlePressFlashcards = () => {
-        // You might want to navigate to the Flashcards screen or perform another action
-        // navigation.navigate('FlashcardsScreen'); // Use the correct screen name as per your navigation setup
+        
+        // navigation.navigate('FlashcardsScreen');
     };
 
     return (
