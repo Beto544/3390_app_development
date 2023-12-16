@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import axios from 'axios'
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 function Login() {
     
     const [name, SetName] = useState("");
@@ -15,14 +16,28 @@ function Login() {
             alert("All fields are required");
             return;
         }
-        await axios.post("http://192.168.1.155:8000/api/user/create", {name: name,email: email,password: password})
-        .then(res => {
-            console.log(res);
-            console.log(res.data)
-        })
-        .catch(error => console.log(error))
-        alert("Signed up successfully!")
+        try {
+            const response = await axios.post("http://192.168.1.155:8000/api/user/signin", {
+                name: name,
+                email: email,
+                password: password
+            });
+            
+            const token = response.data.user?.token;
+            const user = response.data.user?.id;
+
+            await AsyncStorage.setItem('userToken', token);
+            await AsyncStorage.setItem('UserId', user)
+
+            alert("Logged in successfully!");
+
+
+        } catch (error) {
+            console.error(error);
+            alert("Login failed. Please check your credentials.");
+        }
     }
+
     const navigation = useNavigation();
     return (
         <View style={styles.container}>

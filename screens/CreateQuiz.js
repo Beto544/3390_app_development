@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-
+import { Alert } from 'react-native';
+import axios from 'axios';
 const QuizCreationScreen = () => {
   const navigation = useNavigation();
   const [quizName, setQuizName] = useState('');
@@ -11,6 +12,40 @@ const QuizCreationScreen = () => {
   const [currentQuestion, setCurrentQuestion] = useState('');
   const [options, setOptions] = useState(['', '', '', '']);
   const [correctAnswerIndex, setCorrectAnswerIndex] = useState('');
+
+
+  const handleCreateQuiz = async () => {
+     try {
+        const token = await AsyncStorage.getItem('userToken');
+        const user = await AsyncStorage.getItem('UserId');
+        console.log(" THIS IS THE TOKENNNNN  ->  ",token);
+        if (!token) {
+            console.error('Token not found');
+            return null;
+        }
+        //console.log(questions[0].options)
+
+        const response = await axios.post('http://192.168.1.155:8000/api/quiz/createQuiz', {
+          UserId: user,
+          quizName: quizName,
+          questions: questions.map(question => ({
+            "question": question.question,
+            "options": question.options,
+            "answerIndex": question.correctAnswerIndex
+          }))
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            }
+        });
+
+        //return response.data;
+    } catch (error) {
+        console.error('Error creating quiz:', error);
+        return null;
+    }
+  };
 
   // Function to save the quiz locally
   const saveQuiz = async () => {
@@ -58,6 +93,7 @@ const QuizCreationScreen = () => {
     setCorrectAnswerIndex('');
   };
 
+
   return (
     <View>
       <Text>Create Quiz</Text>
@@ -90,7 +126,8 @@ const QuizCreationScreen = () => {
         onChangeText={(text) => setCorrectAnswerIndex(text)}
       />
       <Button title="Add Question" onPress={addQuestion} />
-      <Button title="Save Quiz" onPress={saveQuiz} />
+      <Button title="Save Quiz" onPress={() => {saveQuiz().then(handleCreateQuiz);}} />
+      
       {/* Display questions and options */}
       {questions.map((q, index) => (
         <View key={index}>
