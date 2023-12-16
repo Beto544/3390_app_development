@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 const QuizListScreen = () => {
   const [quizzes, setQuizzes] = useState([]);
   const navigation = useNavigation();
 
-  // Define loadQuizzes inside QuizListScreen
+  // Function to load quizzes from AsyncStorage
   const loadQuizzes = async () => {
     try {
       const quizIds = JSON.parse(await AsyncStorage.getItem('quizIds')) || [];
@@ -24,18 +24,39 @@ const QuizListScreen = () => {
       return [];
     }
   };
+  // Function to delete a quiz
+  const deleteQuiz = async (quizId) => {
+    try {
+      // Remove the quiz from AsyncStorage
+      await AsyncStorage.removeItem(quizId);
 
-  useEffect(() => {
-    const getQuizzes = async () => {
-      const loadedQuizzes = await loadQuizzes();
-      setQuizzes(loadedQuizzes);
-    };
+      // Update the list of quizzes by excluding the deleted quiz
+      setQuizzes((prevQuizzes) => prevQuizzes.filter((quiz) => quiz.quizId !== quizId));
 
-    getQuizzes();
-  }, []);
+      // Update the list of quiz IDs
+      const quizIds = quizzes.map((quiz) => quiz.quizId);
+      await AsyncStorage.setItem('quizIds', JSON.stringify(quizIds));
+
+      // Optionally, show a success message or perform any other necessary actions
+      console.log('Deleted Quiz ID:', quizId);
+    } catch (error) {
+      console.error("Failed to delete quiz:", error);
+    }
+  };
+  // Function to refresh the quiz list
+  const refreshQuizList = async () => {
+    const loadedQuizzes = await loadQuizzes();
+    setQuizzes(loadedQuizzes);
+  };
+
+  useFocusEffect(() => {
+    // Load quizzes when the screen comes into focus
+    refreshQuizList();
+  });
 
   const selectQuiz = (quiz) => {
     // Navigate to TakeQuiz screen with quiz data
+    console.log('Selected QuizID:', quiz.quizId);
     navigation.navigate('TakeQuiz', { quizId: quiz.quizId }); // Pass quizId as a parameter
   };
 
@@ -51,12 +72,17 @@ const QuizListScreen = () => {
               <Text style={styles.quizInfo}>
                 Number of questions: {item.questions.length}
               </Text>
-              {/* Add Pressable to select a quiz */}
               <Pressable
                 onPress={() => selectQuiz(item)}
                 style={styles.startQuizButton}
               >
-                <Text>Start Quiz</Text>
+                <Text style={styles.startQuizButtonText}>Start Quiz</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => deleteQuiz(item.quizId)} // Add deleteQuiz function
+                style={styles.deleteQuizButton} // Style for the delete button
+              >
+                <Text>Delete Quiz</Text>
               </Pressable>
             </View>
           )}
@@ -97,6 +123,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  deleteQuizButton: {
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: '#d9534f', // Red color for delete button
+    borderRadius: 5,
+    alignSelf: 'flex-start',
   },
   
 });
