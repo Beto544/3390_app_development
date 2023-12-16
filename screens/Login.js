@@ -12,6 +12,7 @@ function Login() {
     const [password, SetPassword] = useState("");
 
     const handleSubmit = async () => {
+
         if(name === ' ' || email === ' ' || password === ' '){
             alert("All fields are required");
             return;
