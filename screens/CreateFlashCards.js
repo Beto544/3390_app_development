@@ -59,7 +59,7 @@ const FlashcardCreationScreen = () => {
                return null;
            }
 
-           const response = await axios.post('https://us-west-2.aws.data.mongodb-api.com/app/data-akiyk/endpoint/data/v1/api/set/createSet', {
+           const response = await axios.post('http://localhost:3001/api/set/createSet', {
              UserId: user,
              setName: flashcardSetName,
              card: cards.map(card => ({

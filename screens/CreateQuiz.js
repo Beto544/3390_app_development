@@ -23,7 +23,7 @@ const QuizCreationScreen = () => {
        }
        //console.log(questions[0].options)
 
-       const response = await axios.post('https://us-west-2.aws.data.mongodb-api.com/app/data-akiyk/endpoint/data/v1/api/quiz/createQuiz', {
+       const response = await axios.post('http://localhost:3001/api/quiz/createQuiz', {
          UserId: user,
          quizName: quizName,
          questions: questions.map(question => ({
