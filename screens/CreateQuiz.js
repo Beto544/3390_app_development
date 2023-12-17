@@ -23,7 +23,7 @@ const QuizCreationScreen = () => {
        }
        //console.log(questions[0].options)
 
-       const response = await axios.post('http://localhost:3001/api/quiz/createQuiz', {
+       const response = await axios.post('http://192.168.1.155:8000/api/quiz/createQuiz', {
          UserId: user,
          quizName: quizName,
          questions: questions.map(question => ({

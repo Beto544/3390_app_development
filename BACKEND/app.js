@@ -6,7 +6,7 @@ const app = express()
 const userRouter = require('./routes/user')
 const quizRouter = require('./routes/quiz')
 const setRouter = require('./routes/flash')
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 8000
 
 app.listen(PORT, () => {
     console.log(PORT)

@@ -19,7 +19,7 @@ function Login() {
             alert("All fields are required");
             return;
         }
-        await axios.post("http://localhost:3001/api/user/create", {name: name,email: email,password: password}, {
+        await axios.post("http://192.168.1.155:8000/api/user/create", {name: name,email: email,password: password}, {
             headers: {
               "Content-type": "application/json; charset=UTF-8",
             }
