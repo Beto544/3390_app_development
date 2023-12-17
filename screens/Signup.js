@@ -19,7 +19,7 @@ function Login() {
             alert("All fields are required");
             return;
         }
-        await axios.post("http://192.168.1.155:8000/api/user/create", {name: name,email: email,password: password})
+        await axios.post("https://us-west-2.aws.data.mongodb-api.com/app/data-akiyk/endpoint/data/v1/api/user/create", {name: name,email: email,password: password})
         .then(res => {
             console.log(res);
             console.log(res.data)

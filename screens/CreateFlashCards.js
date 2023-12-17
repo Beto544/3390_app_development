@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+
+
 
 const FlashcardCreationScreen = () => {
     const [flashcardSetName, setFlashcardSetName] = useState('');
@@ -46,6 +49,37 @@ const FlashcardCreationScreen = () => {
         setCurrentBack('');
     };
 
+    const handleCreateSet = async () => {
+        try {
+           const token = await AsyncStorage.getItem('userToken');
+           const user = await AsyncStorage.getItem('UserId');
+           console.log(" THIS IS THE TOKENNNNN  ->  ",token);
+           if (!token || !user) {
+               console.error('NO USER LOGGED IN');
+               return null;
+           }
+
+           const response = await axios.post('https://us-west-2.aws.data.mongodb-api.com/app/data-akiyk/endpoint/data/v1/api/set/createSet', {
+             UserId: user,
+             setName: flashcardSetName,
+             card: cards.map(card => ({
+               "front": card.front,
+               "back": card.back
+             }))
+           }, {
+               headers: {
+                   'Content-Type': 'application/json',
+                   'Authorization': `${token}`
+               }
+           });
+    
+           //return response.data;
+       } catch (error) {
+           console.error('Error creating FLASHCARDS:', error);
+           return null;
+       }
+     };
+
     return (
         <View>
             <TextInput
@@ -64,7 +98,7 @@ const FlashcardCreationScreen = () => {
                 onChangeText={setCurrentBack}
             />
             <Button title="Add Card" onPress={addCard} />
-            <Button title="Save Flashcard Set" onPress={saveFlashcardSet} />
+            <Button title="Save Flashcard Set" onPress={() => {saveFlashcardSet().then(handleCreateSet);}} />
 
             {/* Display success message */}
             {saveSuccessful && (
