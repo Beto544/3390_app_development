@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 
-
 const FlashcardCreationScreen = () => {
     const [flashcardSetName, setFlashcardSetName] = useState('');
     const [cards, setCards] = useState([]);

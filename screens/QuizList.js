@@ -4,6 +4,9 @@ import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
+
+
+
 const QuizListScreen = () => {
   const [quizzes, setQuizzes] = useState([]);
   const navigation = useNavigation();
@@ -24,6 +27,8 @@ const QuizListScreen = () => {
       return [];
     }
   };
+
+  
   // Function to delete a quiz
   const deleteQuiz = async (quizId) => {
     try {

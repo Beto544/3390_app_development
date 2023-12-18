@@ -3,6 +3,32 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import axios from 'axios';
+
+export const LoadFlashCardsFromDB = async () => {
+  const userId = await AsyncStorage.getItem('UserId');
+  const token = await AsyncStorage.getItem('userToken');
+ 
+  if (!token) {
+      alert("Please Login!");
+      return;
+  }
+  
+  try {
+    
+      
+      const response = await axios.get("http://192.168.1.155:8000/api/flashcards", {
+          params: {
+            userId: userId,
+        },
+      });
+      
+      
+      console.log('FlashCards:', response.data);
+  } catch (error) {
+      console.error('Error loading flashcards:', error);
+  }
+};
 
 const FlashcardListScreen = () => {
   const [flashcardSets, setFlashcardSets] = useState([]);

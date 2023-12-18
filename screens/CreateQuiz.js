@@ -5,6 +5,36 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import axios from 'axios';
+//const quest = ""
+//const name = ""
+export const LoadQuizzesFromDB = async () => {
+  const userId = await AsyncStorage.getItem('UserId');
+  const token = await AsyncStorage.getItem('userToken');
+  
+  if (!token) {
+      alert("Please Login!");
+      return;
+  }
+  
+  try {
+    
+      
+      const response = await axios.get("http://192.168.1.155:8000/api/quiz", {
+          params: {
+            userId: userId,
+        },
+      });
+      //name = response.quizName
+      //quest = response.questions
+      
+      
+      console.log('Quizzes:', response.data);
+  } catch (error) {
+      console.error('Error loading quizzes:', error);
+  }
+
+};
+
 const QuizCreationScreen = () => {
   const navigation = useNavigation();
   const [quizName, setQuizName] = useState('');
@@ -12,6 +42,9 @@ const QuizCreationScreen = () => {
   const [currentQuestion, setCurrentQuestion] = useState('');
   const [options, setOptions] = useState(['', '', '', '']);
   const [correctAnswerIndex, setCorrectAnswerIndex] = useState('');
+
+
+
   const handleCreateQuiz = async () => {
     try {
        const token = await AsyncStorage.getItem('userToken');

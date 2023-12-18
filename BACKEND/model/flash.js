@@ -17,12 +17,12 @@ const FlashCardSchema = new mongoose.Schema({
                 type: String,
                 required: true
             },
-            back: [
+            back: 
                 {
                     type: String,
                     required: true
                 }
-            ],
+            ,
         }
     ]
 });

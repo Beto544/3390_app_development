@@ -5,6 +5,8 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LoadQuizzesFromDB } from "./CreateQuiz"
+import { LoadFlashCardsFromDB } from "./MyFlashCards"
 function Login() {
     
     const [name, SetName] = useState("");
@@ -40,6 +42,21 @@ function Login() {
         } catch (error) {
             console.error(error);
             alert("Login failed. Please check your credentials.");
+        }
+    }
+
+    const handleLogOut = async () => {
+        try {
+            // Remove the token and user ID from AsyncStorage
+            await AsyncStorage.removeItem('userToken');
+            await AsyncStorage.removeItem('UserId');
+            
+            alert("Logged out successfully!");
+
+            // Optionally, navigate to a different screen or perform additional logout tasks
+        } catch (error) {
+            console.error(error);
+            alert("Logout failed. Please try again.");
         }
     }
 
@@ -150,8 +167,11 @@ function Login() {
 
             {/* Button */}
             <View style={styles.buttonContainer}>
-                <Button style={styles.buttonDesign} onPress={handleSubmit}>
+                <Button style={styles.buttonDesign} onPress={() => {handleSubmit().then(LoadQuizzesFromDB).then(LoadFlashCardsFromDB);}}>
                     LOGIN
+                </Button>
+                <Button style={styles.buttonDesign} onPress={handleLogOut} >
+                    LOGOUT
                 </Button>
             </View>
             {/* Line */}

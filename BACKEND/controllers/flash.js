@@ -15,10 +15,10 @@ exports.createSet = async (req, res) => {
         const newSet = new FlashCard({
             userId,
             setName,
-            cards: newCards
+            card: newCards
         });
 
-        
+        console.log(newSet)
         await newSet.save();
         
         res.status(201).json(newSet);
