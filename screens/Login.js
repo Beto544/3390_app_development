@@ -7,6 +7,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LoadQuizzesFromDB } from "./CreateQuiz"
 import { LoadFlashCardsFromDB } from "./MyFlashCards"
+
 function Login() {
     
     const [name, SetName] = useState("");
@@ -170,9 +171,19 @@ function Login() {
                 <Button style={styles.buttonDesign} onPress={() => {handleSubmit().then(LoadQuizzesFromDB).then(LoadFlashCardsFromDB);}}>
                     LOGIN
                 </Button>
-                <Button style={styles.buttonDesign} onPress={handleLogOut} >
+                {/* Logout Button */}
+            <View style={styles.buttonContainer}>
+                <Button style={styles.buttonDesign} onPress={handleLogOut}>
                     LOGOUT
                 </Button>
+            </View>
+
+            {/* Line */}
+            <View style={styles.lineStyle}>
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            
+        </View>
             </View>
             {/* Line */}
 

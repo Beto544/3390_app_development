@@ -1,7 +1,9 @@
+//CreateFlashCards.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+
 
 
 const FlashcardCreationScreen = () => {
@@ -28,12 +30,12 @@ const FlashcardCreationScreen = () => {
 
             setFlashcardSetName('');
             setCards([]);
-            setSaveSuccessful(true); // Set saveSuccessful to true upon successful save
+            setSaveSuccessful(true); // Set to true upon successful save
 
             console.log('Flashcard Set Data After Saving:', flashcardSetData);
         } catch (error) {
             console.error('Error saving flashcard set: ', error);
-            setSaveSuccessful(false); // Set saveSuccessful to false if there's an error
+            setSaveSuccessful(false); 
         }
     };
 

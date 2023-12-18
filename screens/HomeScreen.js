@@ -6,15 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 export default function HomeScreen() {
     const navigation = useNavigation(); // Initialize navigation
 
-    // Function to handle the press action
-    const handlePressQuiz = () => {
-        // navigation.navigate('QuizScreen'); 
-    };
-
-    const handlePressFlashcards = () => {
-        
-        // navigation.navigate('FlashcardsScreen');
-    };
 
     return (
         <View style={styles.container}>
@@ -22,15 +13,6 @@ export default function HomeScreen() {
             <Image style={styles.image}
                 source={require('../assets/Quiz.png')}
             />
-            <Pressable style={styles.button} onPress={handlePressQuiz}>
-                <Text style={styles.buttonText}>Most Recent Quiz</Text>
-            </Pressable>
-            <Pressable style={styles.button} onPress={handlePressFlashcards}>
-                <Text style={styles.buttonText}>Most Recent Flashcard</Text>
-            </Pressable>
-            <Pressable style={styles.button} onPress={handlePressFlashcards}>
-                <Text style={styles.buttonText}>Favorites</Text>
-            </Pressable>
             <StatusBar style="auto" />
         </View>
     );

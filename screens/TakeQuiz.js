@@ -67,14 +67,9 @@ const QuizScreen = () => {
         if (quizData) {
           console.log("Entered quiz data")
           const quiz = JSON.parse(quizData);
-          // Now you have your quiz data, set it in the component's state if needed.
-          setQuizData(quiz); // Assuming you have a state variable for quiz data.
-        } else {
-          // Handle the case where there's no quiz data for the given quizId
-          // You can show an error message or navigate back to the quiz list screen.
-        }
+          setQuizData(quiz);
+        } 
       } catch (error) {
-        // Handle errors here
         console.error("Error loading quiz data:", error);
       }
     };

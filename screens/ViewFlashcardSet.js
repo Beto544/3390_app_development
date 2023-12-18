@@ -1,3 +1,4 @@
+//ViewFlashcardSet.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -103,10 +104,10 @@ const ViewFlashcardSet = () => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center', // Centers vertically in the flex container
-      alignItems: 'center', // Centers horizontally in the flex container
+      justifyContent: 'center', 
+      alignItems: 'center', 
       padding: 20,
-      backgroundColor: '#f5f5f5', // Optional: changes the background color of the screen
+      backgroundColor: '#f5f5f5',
     },
     card: {
       width: 300,
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       backfaceVisibility: 'hidden',
-      // Remove position absolute to allow natural centering in the container
+      
     },
     cardBack: {
       top: 0,

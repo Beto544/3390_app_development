@@ -78,7 +78,7 @@ const QuizCreationScreen = () => {
    }
  };
 
-  const [saveSuccessful, setSaveSuccessful] = useState(false); // New state variable for tracking save success
+  const [saveSuccessful, setSaveSuccessful] = useState(false); // state variable for tracking save success
   // Function to save the quiz locally
   const saveQuiz = async () => {
     const quizId = `quiz-${new Date().getTime()}`;

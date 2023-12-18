@@ -29,7 +29,7 @@ const QuizListScreen = () => {
   };
 
   
-  // Function to delete a quiz
+  // delete a quiz
   const deleteQuiz = async (quizId) => {
     try {
       // Remove the quiz from AsyncStorage
@@ -42,11 +42,15 @@ const QuizListScreen = () => {
       const quizIds = quizzes.map((quiz) => quiz.quizId);
       await AsyncStorage.setItem('quizIds', JSON.stringify(quizIds));
 
-      // Optionally, show a success message or perform any other necessary actions
+      // show a success message
       console.log('Deleted Quiz ID:', quizId);
     } catch (error) {
       console.error("Failed to delete quiz:", error);
     }
+  };
+  const editQuiz = (quizId) => {
+    console.log('Quiz data before navigation:', quizId);
+    navigation.navigate('EditQuiz', { quizId });
   };
   // Function to refresh the quiz list
   const refreshQuizList = async () => {
@@ -84,8 +88,14 @@ const QuizListScreen = () => {
                 <Text style={styles.startQuizButtonText}>Start Quiz</Text>
               </Pressable>
               <Pressable
-                onPress={() => deleteQuiz(item.quizId)} // Add deleteQuiz function
-                style={styles.deleteQuizButton} // Style for the delete button
+                onPress={() => editQuiz(item.quizId)} 
+                style={styles.editQuizButton} 
+              >
+                <Text>Edit Quiz</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => deleteQuiz(item.quizId)} 
+                style={styles.deleteQuizButton} 
               >
                 <Text>Delete Quiz</Text>
               </Pressable>
@@ -122,7 +132,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: '#5cb85c', 
     borderRadius: 5,
-    alignSelf: 'flex-start', // align to the left
+    alignSelf: 'flex-start', 
   },
   startQuizButtonText: {
     color: 'white',
@@ -133,7 +143,15 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: '#d9534f', // Red color for delete button
+    backgroundColor: '#d9534f', // Red for delete button
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+  },
+  editQuizButton: {
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: '#337ab7', // Blue for edit button
     borderRadius: 5,
     alignSelf: 'flex-start',
   },

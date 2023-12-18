@@ -50,7 +50,10 @@ const FlashcardListScreen = () => {
       return [];
     }
   };
-
+  const editFlashcardSet = (flashcardSet) => {
+    console.log('Editing Flashcard Set ID:', flashcardSet.setId);
+    navigation.navigate('EditFlash', { setId: flashcardSet.setId }); // Navigate to EditFlash screen
+  };
   // Function to delete a flashcard set
   const deleteFlashcardSet = async (setId) => {
     try {
@@ -64,7 +67,7 @@ const FlashcardListScreen = () => {
       const setIds = flashcardSets.map((set) => set.setId);
       await AsyncStorage.setItem('flashcardSetIds', JSON.stringify(setIds));
 
-      // Optionally, show a success message or perform any other necessary actions
+      // show a success message 
       console.log('Deleted Flashcard Set ID:', setId);
     } catch (error) {
       console.error("Failed to delete flashcard set:", error);
@@ -83,7 +86,7 @@ const FlashcardListScreen = () => {
   });
 
   const selectFlashcardSet = (flashcardSet) => {
-    // Navigate to a screen to view or interact with the selected flashcard set
+    // Navigate to a screen
     console.log('Selected Flashcard Set ID:', flashcardSet.setId);
     navigation.navigate('TakeFlash', { setId: flashcardSet.setId }); // Pass setId as a parameter
   };
@@ -107,6 +110,12 @@ const FlashcardListScreen = () => {
                 <Text>View Set</Text>
               </Pressable>
               <Pressable
+                onPress={() => editFlashcardSet(item)}
+                style={styles.editSetButton}
+              >
+                <Text>Edit Set</Text>
+              </Pressable>
+              <Pressable
                 onPress={() => deleteFlashcardSet(item.setId)}
                 style={styles.deleteSetButton}
               >
@@ -121,7 +130,6 @@ const FlashcardListScreen = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   setItem: {
     padding: 20,
@@ -145,16 +153,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: '#5cb85c',
     borderRadius: 5,
-    alignSelf: 'flex-start', // align to the left
+    alignSelf: 'flex-start',
   },
   deleteSetButton: {
     marginTop: 10,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: '#d9534f', // Red color for delete button
+    backgroundColor: '#d9534f', // Red for delete button
     borderRadius: 5,
     alignSelf: 'flex-start',
   },
+  editSetButton: {
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: '#337ab7', // blue for edit button
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+  },
+  
 });
 
 export default FlashcardListScreen;
