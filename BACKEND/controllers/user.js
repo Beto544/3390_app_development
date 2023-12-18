@@ -27,7 +27,7 @@ exports.signin = async (req,res) => {
     if(!user) return res
     .status(400)
     .json({sucess:false, error:'User not found'});
-
+    
     const isMatched = await user.comparePassword(password)
     if(!isMatched) return res
     .status(400)

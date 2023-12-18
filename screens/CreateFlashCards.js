@@ -58,7 +58,7 @@ const FlashcardCreationScreen = () => {
                console.error('NO USER LOGGED IN');
                return null;
            }
-
+        console.log(cards[0].front,cards[0].back);
            const response = await axios.post('http://192.168.1.155:8000/api/set/createSet', {
              UserId: user,
              setName: flashcardSetName,

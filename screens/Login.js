@@ -18,10 +18,14 @@ function Login() {
             return;
         }
         try {
-            const response = await axios.post("http://192.168.1.155:8000//api/user/signin", {
+            const response = await axios.post("http://192.168.1.155:8000/api/user/signin", {
                 name: name,
                 email: email,
                 password: password
+            }, {
+                headers: {
+                  "Content-type": "application/json; charset=UTF-8",
+                }
             });
             
             const token = response.data.user?.token;
